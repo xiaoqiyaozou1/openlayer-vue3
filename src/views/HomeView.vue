@@ -1,16 +1,53 @@
 <template>
   <div class="home">
     <InitMap></InitMap>
+    <PopupContainer id="popupContainer" @close-container="closePopup">
+      <div>
+        {{ number }}
+      </div>
+    </PopupContainer>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import InitMap from './components/InitMap/InitMap.vue';
+import InitMap from '@/components/common/InitMap/InitMap.vue';
+import PopupContainer from "@/components/common/Popups/PopupContainer.vue"
+import olHelpUtils from '@/js/common/openlayer/olHelpUtils';
 export default {
   name: 'HomeView',
   components: {
-    InitMap
+    InitMap,
+    PopupContainer
+  },
+  data() {
+    return {
+      isShowPopup: false,
+      number: 1,
+      overlay: null
+    }
+  },
+  methods: {
+    openPopup() {
+      const that = this;
+      olHelpUtils.olMap.on('singleclick', function (evt) {
+        const dom = document.getElementById('popupContainer')
+        const overlay = olHelpUtils.createPopup(dom)
+        const coordinate = evt.coordinate;
+        overlay.setPosition(coordinate);
+        that.overlay = overlay
+        that.number += 1
+
+      });
+
+    },
+    closePopup() {
+      this.overlay.setPosition(undefined)
+    }
+  },
+  mounted() {
+    this.openPopup()
   }
+
 }
 </script>

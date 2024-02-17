@@ -6,7 +6,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import olUtils from "@/js/olUtils"
+import olMainUtils from "@/js/common/openlayer/olMainUtils"
 
 const olOptions = {
     center: [104, 34],
@@ -19,8 +19,8 @@ const layerData = [{
     type: 'xyz'
 }]
 onMounted(() => {
-    olUtils.initMap('mapContainer', olOptions)
-    olUtils.addLayerData(layerData)
+    olMainUtils.initMap('mapContainer', olOptions)
+    olMainUtils.addLayerData(layerData)
 })
 </script>
 

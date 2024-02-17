@@ -22,3 +22,13 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## 功能
+
+### 加数据
+ 
+```
+1、加载xyz 格式天地图
+2、加载geojson
+```

@@ -4,10 +4,11 @@ import TileLayer from 'ol/layer/Tile.js';
 import View from 'ol/View.js';
 import XYZ from 'ol/source/XYZ';
 import { fromLonLat } from 'ol/proj';
-
-
-const olUtils = {
+import olDataUtils from './olDataUtils';
+import olHelpUtils from './olHelpUtils';
+const olMainUtils = {
   olMap: null,
+
   initMap(dom, options) {
     let defaultOptions = {
       center: [0, 0],
@@ -28,6 +29,9 @@ const olUtils = {
         zoom: defaultOptions.zoom
       })
     })
+    
+    olDataUtils.olMap = this.olMap;
+    olHelpUtils.olMap = this.olMap;
   },
   addLayerData(layerData) {
     for (let i = 0; i < layerData.length; i++) {
@@ -35,17 +39,16 @@ const olUtils = {
       const type = element.type
       switch (type) {
         case 'xyz':
-          this.addXYZLayer(element)
+          olDataUtils.addXYZLayer(element)
           break;
+        case 'geojson':
+          olDataUtils.addGeoJson(element)
       }
     }
+
+    olDataUtils.addGeoJson();
   },
-  addXYZLayer(options) {
-    let xyzLayer = new TileLayer({
-      source: new XYZ(options)
-    })
-    this.olMap.addLayer(xyzLayer)
-  }
+
 
 }
-export default olUtils
+export default olMainUtils
