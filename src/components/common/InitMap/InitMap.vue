@@ -14,9 +14,13 @@ const olOptions = {
 }
 // http://t0.tianditu.gov.cn/cva_w/wmts?tk=
 const layerData = [{
-    id: 'xx',
+    id: 'tianDiTuXyzLabel',
     url: 'http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=c700e75dd8da6ef7b17f67ce47bb060f',
     type: 'xyz'
+},{
+    id:'chinaGeoJson',
+    url:'./data/geojson/china.json',
+    type:'geojson'
 }]
 onMounted(() => {
     olMainUtils.initMap('mapContainer', olOptions)

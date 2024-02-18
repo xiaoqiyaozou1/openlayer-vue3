@@ -6,6 +6,7 @@
         {{ number }}
       </div>
     </PopupContainer>
+    <LayerTree></LayerTree>
   </div>
 </template>
 
@@ -14,11 +15,13 @@
 import InitMap from '@/components/common/InitMap/InitMap.vue';
 import PopupContainer from "@/components/common/Popups/PopupContainer.vue"
 import olHelpUtils from '@/js/common/openlayer/olHelpUtils';
+import LayerTree from "@/components/common/LayerTree/LayerTree.vue"
 export default {
   name: 'HomeView',
   components: {
     InitMap,
-    PopupContainer
+    PopupContainer,
+    LayerTree
   },
   data() {
     return {
@@ -46,7 +49,7 @@ export default {
     }
   },
   mounted() {
-    this.openPopup()
+    //this.openPopup()
   }
 
 }

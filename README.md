@@ -26,9 +26,17 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## 功能
 
-### 加数据
+### 数据
  
 ```
-1、加载xyz 格式天地图
-2、加载geojson
+1、支持加载xyz 格式天地图
+2、支持加载geojson
+3、增加图层控制
+```
+
+### 工具
+
+```
+1、支持点击创建气泡
+
 ```
