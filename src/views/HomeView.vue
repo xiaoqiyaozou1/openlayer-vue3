@@ -7,6 +7,13 @@
       </div>
     </PopupContainer>
     <LayerTree></LayerTree>
+    <div class="draw-container">
+      <el-button @click="drawGeo('point')">绘制点</el-button>
+      <el-button @click="drawGeo('line')">绘制线</el-button>
+      <el-button @click="drawGeo('polygon')">绘制多边形</el-button>
+      <el-button @click="drawGeo('circle')">绘制圆</el-button>
+      <el-button @click="clearDraw">清除</el-button>
+    </div>
   </div>
 </template>
 
@@ -16,6 +23,7 @@ import InitMap from '@/components/common/InitMap/InitMap.vue';
 import PopupContainer from "@/components/common/Popups/PopupContainer.vue"
 import olHelpUtils from '@/js/common/openlayer/olHelpUtils';
 import LayerTree from "@/components/common/LayerTree/LayerTree.vue"
+
 export default {
   name: 'HomeView',
   components: {
@@ -46,6 +54,21 @@ export default {
     },
     closePopup() {
       this.overlay.setPosition(undefined)
+    },
+    drawGeo(type) {
+      if (type == 'point') {
+        olHelpUtils.drawPoint()
+      } else if (type == 'line') {
+        olHelpUtils.drawLine()
+      } else if (type == 'polygon') {
+        olHelpUtils.drawPolygon()
+      } else if (type == 'circle') {
+        olHelpUtils.drawCircle()
+      }
+
+    },
+    clearDraw() {
+      olHelpUtils.clearDrawContent()
     }
   },
   mounted() {
@@ -54,3 +77,10 @@ export default {
 
 }
 </script>
+<style>
+.draw-container {
+  position: absolute;
+  right: 15px;
+  top: 15px
+}
+</style>
