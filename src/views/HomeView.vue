@@ -55,17 +55,18 @@ export default {
     closePopup() {
       this.overlay.setPosition(undefined)
     },
-    drawGeo(type) {
+    async drawGeo(type) {
+      let res = null;
       if (type == 'point') {
-        olHelpUtils.drawPoint()
+        res = await olHelpUtils.drawPoint()
       } else if (type == 'line') {
-        olHelpUtils.drawLine()
+        res = await olHelpUtils.drawLine()
       } else if (type == 'polygon') {
-        olHelpUtils.drawPolygon()
+        res = await olHelpUtils.drawPolygon()
       } else if (type == 'circle') {
-        olHelpUtils.drawCircle()
+        res = await olHelpUtils.drawCircle()
       }
-
+      console.log(res);
     },
     clearDraw() {
       olHelpUtils.clearDrawContent()

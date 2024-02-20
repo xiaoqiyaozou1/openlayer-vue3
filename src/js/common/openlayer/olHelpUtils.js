@@ -4,6 +4,8 @@ import Overlay from 'ol/Overlay.js';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Draw from 'ol/interaction/Draw.js';
+import GeoJSON from 'ol/format/GeoJSON';
+import { Feature } from 'ol';
 const olHelpUtils = {
     olMap: null,
     olDraw: null,
@@ -21,49 +23,109 @@ const olHelpUtils = {
         this.olMap.addOverlay(overlay)
         return overlay;
     },
-    drawPoint() {
+    drawPoint(prj = '4326') {
         this.initDrawOption()
         this.olDraw = new Draw({
             source: this.olDrawSource,
             type: 'Point'
         })
-        this.olDraw.on('drawend', () => {
-            this.olMap.removeInteraction(this.olDraw)
-        })
+
         this.olMap.addInteraction(this.olDraw);
+        let that = this;
+        return new Promise(resolve => {
+            that.olDraw.on('drawend', (event) => {
+                let geoJson = null
+                if (prj == '4326') {
+                    const feature = new Feature({
+                        geometry: event.feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326')
+                    })
+                    geoJson = new GeoJSON().writeFeature(feature)
+                } else {
+                    geoJson = new GeoJSON.writeFeature(event.feature)
+                }
+
+                that.olMap.removeInteraction(this.olDraw)
+                resolve(JSON.parse(geoJson))
+            })
+        })
+
     },
-    drawLine(){
+    drawLine(prj = '4326') {
         this.initDrawOption()
         this.olDraw = new Draw({
             source: this.olDrawSource,
             type: 'LineString'
         })
-        this.olDraw.on('drawend', () => {
-            this.olMap.removeInteraction(this.olDraw)
-        })
         this.olMap.addInteraction(this.olDraw);
+        let that = this;
+        return new Promise(resolve => {
+            that.olDraw.on('drawend', (event) => {
+                let geoJson = null
+                if (prj == '4326') {
+                    const feature = new Feature({
+                        geometry: event.feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326')
+                    })
+                    geoJson = new GeoJSON().writeFeature(feature)
+                } else {
+                    geoJson = new GeoJSON.writeFeature(event.feature)
+                }
+
+                that.olMap.removeInteraction(this.olDraw)
+                resolve(JSON.parse(geoJson))
+            })
+        })
     },
-    drawPolygon(){
+    drawPolygon(prj = '4326') {
         this.initDrawOption()
         this.olDraw = new Draw({
             source: this.olDrawSource,
             type: 'Polygon'
         })
-        this.olDraw.on('drawend', () => {
-            this.olMap.removeInteraction(this.olDraw)
-        })
+
         this.olMap.addInteraction(this.olDraw);
+        let that = this;
+        return new Promise(resolve => {
+            that.olDraw.on('drawend', (event) => {
+                let geoJson = null
+                if (prj == '4326') {
+                    const feature = new Feature({
+                        geometry: event.feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326')
+                    })
+                    geoJson = new GeoJSON().writeFeature(feature)
+                } else {
+                    geoJson = new GeoJSON.writeFeature(event.feature)
+                }
+
+                that.olMap.removeInteraction(this.olDraw)
+                resolve(JSON.parse(geoJson))
+            })
+        })
     },
-    drawCircle(){
+    drawCircle(prj = '4326') {
         this.initDrawOption()
         this.olDraw = new Draw({
             source: this.olDrawSource,
             type: 'Circle'
         })
-        this.olDraw.on('drawend', () => {
-            this.olMap.removeInteraction(this.olDraw)
-        })
+
         this.olMap.addInteraction(this.olDraw);
+        let that = this;
+        return new Promise(resolve => {
+            that.olDraw.on('drawend', (event) => {
+                let geoJson = null
+                if (prj == '4326') {
+                    const feature = new Feature({
+                        geometry: event.feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326')
+                    })
+                    geoJson = new GeoJSON().writeFeature(feature)
+                } else {
+                    geoJson = new GeoJSON.writeFeature(event.feature)
+                }
+
+                that.olMap.removeInteraction(this.olDraw)
+                resolve(JSON.parse(geoJson))
+            })
+        })
     },
     initDrawOption() {
         if (!this.olDrawLayer) {
