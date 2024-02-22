@@ -56,9 +56,7 @@ const selectChange = () => {
 <style lang="scss" scoped>
 .layer-tree {
     width: 300px;
-    height: 600px;
-    position: absolute;
-    left: 15px;
-    bottom: 15px;
+   
+
 }
 </style>

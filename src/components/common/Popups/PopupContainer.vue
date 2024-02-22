@@ -17,7 +17,7 @@ const closeContainer = () => {
 
 <style lang="scss" scoped>
 .popup-container {
-    position: absolute;
+
     min-width: 200px;
     min-height: 200px;
     background-color: #fff;
