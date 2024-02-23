@@ -6,6 +6,7 @@ import XYZ from 'ol/source/XYZ';
 import { fromLonLat } from 'ol/proj';
 import olDataUtils from './olDataUtils';
 import olHelpUtils from './olHelpUtils';
+import olMessureUtils from './olMessureUtils';
 const olMainUtils = {
   olMap: null,
 
@@ -29,9 +30,10 @@ const olMainUtils = {
         zoom: defaultOptions.zoom
       })
     })
-    
+
     olDataUtils.olMap = this.olMap;
     olHelpUtils.olMap = this.olMap;
+    olMessureUtils.olMap = this.olMap;
   },
   addLayerData(layerData) {
     for (let i = 0; i < layerData.length; i++) {

@@ -18,6 +18,11 @@
                 <el-button @click="openPopupEvent">打开气泡事件</el-button>
                 <el-button @click="closePopupEvent">关闭气泡事件</el-button>
             </div>
+            <div class="popup-ctr example-row">
+                <el-button @click="messureFunc('LineString')">距离测量</el-button>
+                <el-button @click="messureFunc('Polygon')">面积测量</el-button>
+                <el-button @click="messureFunc('Polygon')">清除</el-button>
+            </div>
         </div>
 
     </div>
@@ -27,6 +32,7 @@
 import PopupContainer from "@/components/common/Popups/PopupContainer.vue"
 import olHelpUtils from '@/js/common/openlayer/olHelpUtils';
 import LayerTree from "@/components/common/LayerTree/LayerTree.vue"
+import olMessureUtils from '@/js/common/openlayer/olMessureUtils'
 import { onMounted, ref } from "vue";
 
 
@@ -67,7 +73,7 @@ const openPopupEvent = () => {
 }
 
 const closePopupEvent = () => {
-    
+
     olHelpUtils.olMap.un('singleclick', singleclick.listener)
     if (overlay.value) {
         overlay.value.setPosition(undefined);
@@ -78,6 +84,9 @@ const closePopup = () => {
     if (overlay.value) {
         overlay.value.setPosition(undefined);
     }
+}
+const messureFunc = (type) => {
+    olMessureUtils.messure(type)
 }
 onMounted(() => {
     initPopup()
@@ -90,10 +99,8 @@ onMounted(() => {
     right: 15px;
     top: 15px
 }
-.example-row{
+
+.example-row {
     margin-top: 10px;
 }
-
-
-
 </style>
