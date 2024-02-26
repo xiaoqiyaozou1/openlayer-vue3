@@ -21,7 +21,7 @@
             <div class="popup-ctr example-row">
                 <el-button @click="messureFunc('LineString')">距离测量</el-button>
                 <el-button @click="messureFunc('Polygon')">面积测量</el-button>
-                <el-button @click="messureFunc('Polygon')">清除</el-button>
+                <el-button @click="clearMeasureContent">清除</el-button>
             </div>
         </div>
 
@@ -87,6 +87,9 @@ const closePopup = () => {
 }
 const messureFunc = (type) => {
     olMessureUtils.messure(type)
+}
+const clearMeasureContent = () => {
+    olMessureUtils.clear()
 }
 onMounted(() => {
     initPopup()

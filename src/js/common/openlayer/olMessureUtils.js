@@ -12,7 +12,7 @@ import {
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Draw from 'ol/interaction/Draw.js';
-import { LineString, Polygon, Point } from 'ol/geom.js';
+import { Point } from 'ol/geom.js';
 import { getArea, getLength } from 'ol/sphere.js';
 import { unByKey } from 'ol/Observable.js';
 const olMessureUtils = {
@@ -20,9 +20,9 @@ const olMessureUtils = {
     olDraw: null,
     olDrawLayer: null,
     olDrawSource: null,
-    labelStyle: null,
-    olLable:null,
-    olPoint:null,
+    olStyle: null,
+
+    olLabelStyle: null,
     messure(type) {
         this.initDrawOption()
         let that = this;
@@ -33,67 +33,30 @@ const olMessureUtils = {
                 return that.styleFunction(feature, type);
             },
         })
-        let sketch = null
+
 
         this.olMap.addInteraction(this.olDraw);
 
-        // this.olDraw.on('drawstart', function (evt) {
+        this.olDraw.on('drawstart', function (evt) {
 
 
 
-        // });
+        });
 
         this.olDraw.on('drawend', function (evt) {
-            // const geom = evt.feature.getGeometry();
-            // let output = ''
-            // let tooltipCoord = null
-            // if (geom instanceof Polygon) {
-            //     output = that.formatArea(geom);
-            //     tooltipCoord = geom.getInteriorPoint().getCoordinates();
-            // } else if (geom instanceof LineString) {
-            //     output = that.formatLength(geom);
-            //     tooltipCoord = geom.getLastCoordinate();
-            // }
 
-            // if (output && tooltipCoord) {
-            //     console.log(tooltipCoord);
-            //    let  point = new Point(tooltipCoord);
-            //     that.labelStyle.setGeometry(point);
-            //     that.labelStyle.getText().setText(output);
-            // }
         });
     },
     styleFunction(feature, drawType) {
-     
+
         const styles = [];
         let that = this;
         const geometry = feature.getGeometry();
-   
         const type = geometry.getType();
         let point, label;
-
         if (!drawType || drawType === type || type === 'Point') {
-            styles.push(new Style({
-                fill: new Fill({
-                    color: 'rgba(255, 255, 255, 0.2)',
-                }),
-                stroke: new Stroke({
-                    color: 'rgba(0, 0, 0, 0.5)',
-                    lineDash: [10, 10],
-                    width: 2,
-                }),
-                image: new CircleStyle({
-                    radius: 5,
-                    stroke: new Stroke({
-                        color: 'rgba(0, 0, 0, 0.7)',
-                    }),
-                    fill: new Fill({
-                        color: 'rgba(255, 255, 255, 0.2)',
-                    }),
-                }),
-            }));
+            styles.push(this.olStyle);
             if (type === 'Polygon') {
-                console.log(geometry.getInteriorPoint());
                 point = geometry.getInteriorPoint();
                 label = that.formatArea(geometry);
 
@@ -103,25 +66,16 @@ const olMessureUtils = {
 
             }
             if (label && point) {
-      
-                that.labelStyle.setGeometry(point);
-                that.labelStyle.getText().setText(label);
-                that.olLable = label
-                that.olPoint = point
-                styles.push(that.labelStyle);
-                return styles;
-            }else{
-                that.labelStyle.setGeometry( that.olPoint);
-                that.labelStyle.getText().setText(  that.olLable);
-            
-                styles.push(that.labelStyle);
+                that.olLabelStyle.setGeometry(point);
+                that.olLabelStyle.getText().setText(label);
+                styles.push(that.olLabelStyle);
                 return styles;
             }
         }
 
- 
 
- 
+
+
     },
     formatLength(line) {
         const length = getLength(line);
@@ -144,21 +98,34 @@ const olMessureUtils = {
         return output;
     },
     initDrawOption() {
-        if (!this.olDrawLayer) {
-            this.olDrawSource = new VectorSource({
-                wrapX: false
-            })
-            this.olDrawLayer = new VectorLayer({
-                source: this.olDrawSource
-            })
-            this.olMap.addLayer(this.olDrawLayer)
-        }
+
         if (this.olDraw) {
             this.olMap.removeInteraction(this.olDraw)
             this.olDraw = null;
         }
-        if (this.labelStyle == null) {
-            this.labelStyle = new Style({
+        if (this.olStyle == null) {
+            this.olStyle = new Style({
+                fill: new Fill({
+                    color: 'rgba(255, 255, 255, 0.2)',
+                }),
+                stroke: new Stroke({
+                    color: 'rgba(0, 0, 0, 0.5)',
+                    lineDash: [10, 10],
+                    width: 2,
+                }),
+                image: new CircleStyle({
+                    radius: 5,
+                    stroke: new Stroke({
+                        color: 'rgba(0, 0, 0, 0.7)',
+                    }),
+                    fill: new Fill({
+                        color: 'rgba(255, 255, 255, 0.2)',
+                    }),
+                }),
+            })
+        }
+        if (this.olLabelStyle == null) {
+            this.olLabelStyle = new Style({
                 text: new Text({
                     font: '14px Calibri,sans-serif',
                     fill: new Fill({
@@ -180,9 +147,30 @@ const olMessureUtils = {
                         color: 'rgba(0, 0, 0, 0.7)',
                     }),
                 }),
-            });
+            })
+        }
+        if (!this.olDrawLayer) {
+            this.olDrawSource = new VectorSource({
+
+            })
+            let that = this
+            this.olDrawLayer = new VectorLayer({
+                source: this.olDrawSource,
+                style: function (feature) {
+                    return that.styleFunction(feature)
+                }
+            })
+            this.olMap.addLayer(this.olDrawLayer)
         }
     },
+    clear() {
+        this.olDrawSource.clear()
+        if (this.olDraw) {
+            this.olMap.removeInteraction(this.olDraw)
+            this.olDraw = null;
+        }
+    }
+
 }
 
 export default olMessureUtils
