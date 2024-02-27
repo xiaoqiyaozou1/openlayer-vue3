@@ -18,7 +18,8 @@ const olHelpUtils = {
                 animation: {
                     duration: 250
                 }
-            }
+            },
+            positioning:'bottom-left'
         })
         this.olMap.addOverlay(overlay)
         return overlay;

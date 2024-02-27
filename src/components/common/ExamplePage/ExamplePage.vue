@@ -2,7 +2,7 @@
     <div>
         <PopupContainer id="popupContainer" @close-container="closePopup">
             <div>
-                {{ number }}
+                {{ showQueryTxt }}
             </div>
         </PopupContainer>
         <div class="example-container">
@@ -34,6 +34,7 @@ import olHelpUtils from '@/js/common/openlayer/olHelpUtils';
 import LayerTree from "@/components/common/LayerTree/LayerTree.vue"
 import olMessureUtils from '@/js/common/openlayer/olMessureUtils'
 import { onMounted, ref } from "vue";
+import olDataUtils from "@/js/common/openlayer/olDataUtils";
 
 
 const drawGeo = (type) => {
@@ -51,23 +52,41 @@ const drawGeo = (type) => {
 const clearDraw = () => {
     olHelpUtils.clearDrawContent()
 }
-const number = ref(1)
+const showQueryTxt = ref('')
 
 const overlay = ref(null)
 const initPopup = () => {
 
     if (overlay.value == null) {
         const dom = document.getElementById('popupContainer')
-        overlay.value = olHelpUtils.createPopup(dom)
+        const options = {}
+        overlay.value = olHelpUtils.createPopup(dom, options)
     }
 
 }
 let singleclick = null
 const openPopupEvent = () => {
-    singleclick = olHelpUtils.olMap.on('singleclick', function (evt) {
+    singleclick = olHelpUtils.olMap.on('singleclick', async (evt) => {
         const coordinate = evt.coordinate;
-        number.value = number.value + 1
+        const pixel = olHelpUtils.olMap.getEventPixel(evt.originalEvent);
+        const queryLayer = olDataUtils.getLayerById('chinaGeoJson')
+        if (queryLayer) {
+            const layer = queryLayer.layer
+            const features = await layer.getFeatures(pixel)
+            if (features.length > 0) {
+                showQueryTxt.value = features[0].values_.name
+            }
+
+
+        }
+
         overlay.value.setPosition(coordinate);
+
+
+        //全局查
+        // olHelpUtils.olMap.forEachFeatureAtPixel(pixel, function (feature) {
+
+        // })
 
     });
 }

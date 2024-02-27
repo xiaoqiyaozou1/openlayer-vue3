@@ -88,13 +88,17 @@ const olDataUtils = {
   setLayerIsShow(id, isShow) {
     for (let i = 0; i < this.layerDataArr.length; i++) {
       const element = this.layerDataArr[i];
-    
+
       if (element.id == id) {
         console.log(element);
         element.layer.setVisible(isShow);
       }
     }
   },
+  getLayerById(id) {
+    const layerData = this.layerDataArr.find(x => x.id == id)
+    return layerData
+  }
 };
 
 export default olDataUtils;
